@@ -1,72 +1,126 @@
-# OptLearn — Numerical Optimization Framework in Python
+# OptLearn: Numerical Optimization Framework in Python
 
-OptLearn is a **numerical optimization framework** implemented in Python, designed for solving **continuous optimization problems** using **gradient-based methods**.  
-The project provides a unified optimization interface and multiple optimizers commonly used in **machine learning**, **statistical inference**, and **scientific computing**.
+OptLearn is a Python framework for **numerical optimization** and **gradient-based learning**, designed to solve **continuous optimization problems** commonly arising in **Machine Learning**, **Neural Networks**, and **Scientific Computing**.
 
-Although neural network training is included as an example, the core of OptLearn is a **general-purpose optimizer**, applicable to arbitrary objective functions.
+It provides a full workflow for **first-order optimization**, **convergence analysis**, and **model parameter estimation**, with reproducible outputs and visual diagnostics.
 
 ---
 
-## Core Idea
+## Optimization Model
 
-Given an objective function:
+OptLearn minimizes objective functions of the form:
 
-\[
-\min_{\mathbf{x}} f(\mathbf{x})
-\]
+[
+\min_{\theta \in \mathbb{R}^n} f(\theta)
+]
 
-OptLearn performs iterative optimization using **numerical gradients** and modular **update rules**, allowing different optimizers to be swapped without changing the problem definition.
+using **numerical gradients** computed via central finite differences:
+
+[
+\frac{\partial f}{\partial \theta_i}
+\approx
+\frac{f(\theta_i + \varepsilon) - f(\theta_i - \varepsilon)}{2\varepsilon}
+]
+
+This formulation allows optimization of **arbitrary black-box objectives**, including loss functions that do not admit closed-form gradients.
 
 ---
 
 ## Supported Optimizers
 
-### Stochastic Gradient Descent (SGD)
+OptLearn implements several widely used **gradient-based optimizers** under a unified API:
 
-\[
-\mathbf{x}_{t+1} = \mathbf{x}_t - \eta \nabla f(\mathbf{x}_t)
-\]
+* **Stochastic Gradient Descent (SGD)**
+* **Momentum**
+* **RMSProp**
+* **Adam**
 
-### Momentum
+Each optimizer tracks:
 
-\[
-\mathbf{v}_t = \beta \mathbf{v}_{t-1} + (1 - \beta)\nabla f(\mathbf{x}_t)
-\]
-\[
-\mathbf{x}_{t+1} = \mathbf{x}_t - \eta \mathbf{v}_t
-\]
+* Objective value ( f(\theta) )
+* Gradient norm ( |\nabla f(\theta)| )
+* Parameter trajectory across iterations
 
-### RMSProp
-
-\[
-\mathbf{s}_t = \beta \mathbf{s}_{t-1} + (1 - \beta)(\nabla f(\mathbf{x}_t))^2
-\]
-\[
-\mathbf{x}_{t+1} = \mathbf{x}_t - \frac{\eta}{\sqrt{\mathbf{s}_t} + \epsilon} \nabla f(\mathbf{x}_t)
-\]
-
-### Adam
-
-\[
-\mathbf{m}_t = \beta_1 \mathbf{m}_{t-1} + (1 - \beta_1)\nabla f(\mathbf{x}_t)
-\]
-\[
-\mathbf{v}_t = \beta_2 \mathbf{v}_{t-1} + (1 - \beta_2)(\nabla f(\mathbf{x}_t))^2
-\]
+Convergence behavior is automatically logged and visualized.
 
 ---
 
-## Neural Network Optimization Example
+## Optimization Benchmarks
 
-The framework includes a neural network regression example to demonstrate scalability to high-dimensional parameter spaces.
+The framework includes standard benchmark functions used to evaluate optimizer performance:
 
-### Convergence
+* **Quadratic Function** (convex)
+* **Rosenbrock Function** (non-convex, ill-conditioned)
+* **Himmelblau Function** (multi-modal)
 
-![Neural Network Convergence](plots/NN_convergence.png)
+These examples highlight different optimization challenges such as curvature, local minima, and stability.
 
-### Trained Network Fit
+**Convergence example:**
 
-![Neural Network Fit](plots/nn_plot.png)
+| Convergence                          |
+| ------------------------------------ |
+| ![](plots/Quadratic_convergence.png) |
+
+---
+
+## Example: Neural Network Optimization
+
+Neural network training is treated as a **pure optimization problem**.
+
+### Model
+
+[
+y = a \sin(x) + b x + \epsilon
+]
+
+A fully connected neural network (R → R) is trained by minimizing a **weighted least-squares loss** with L2 regularization:
+
+[
+\chi^2(\theta) =
+\sum_i \left( \frac{y_i - \hat y_i(\theta)}{\sigma_i} \right)^2
+
+* \lambda |\theta|_2^2
+  ]
+
+This example demonstrates the application of general-purpose optimizers to **nonlinear function approximation** under noisy observations.
+
+### Results
+
+| Convergence                   | Trained Model          |
+| ----------------------------- | ---------------------- |
+| ![](plots/NN_convergence.png) | ![](plots/nn_plot.png) |
+
+* Left: optimizer convergence (loss and gradient norm)
+* Right: learned function compared to noisy data
+* Illustrates stability, smoothness, and generalization
+
+---
+
+## Features
+
+* Modular optimizer architecture
+* Numerical gradient computation
+* Convergence tracking and visualization
+* L2 regularization support
+* Reproducible experiments
+* Automatic saving of:
+
+  * Optimization histories (`.txt`)
+  * Convergence plots (`.png`)
+  * Model-fit visualizations (`.png`)
+
+---
+
+## Usage
+
+```bash
+python3 main.py
+```
+
+Outputs:
+
+* `results/` — optimization logs
+* `plots/` — convergence and model-fit figures
 
 ---
 
@@ -74,26 +128,17 @@ The framework includes a neural network regression example to demonstrate scalab
 
 ```
 OptLearn/
-├── examples/
-├── optimizers/
-├── plots/
-├── results/
-├── utils.py
-├── optimize.py
-├── main.py
-└── README.md
-```
-
----
-
-## How to Run
-
-```bash
-python main.py
+├── optimizers/      # SGD, Momentum, RMSProp, Adam
+├── examples/        # Benchmark and neural network examples
+├── utils.py         # Gradients, plotting, logging
+├── optimize.py      # Core optimization loop
+├── main.py          # Execute experiments
+├── results/         # Optimization histories
+└── plots/           # Convergence and fit plots
 ```
 
 ---
 
 ## License
 
-MIT License
+MIT License — see `LICENSE` for details.
