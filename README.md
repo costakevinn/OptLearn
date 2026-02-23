@@ -1,61 +1,76 @@
-# OptLearn: Numerical Optimization Framework in Python
+# 🚀 OptLearn — Numerical Optimization Framework in Python
 
-OptLearn is a Python framework for **numerical optimization** and **gradient-based learning**, designed to solve **continuous optimization problems** commonly arising in **Machine Learning**, **Neural Networks**, and **Scientific Computing**.
+OptLearn is a Python framework for numerical optimization and gradient-based learning, designed to solve continuous optimization problems commonly found in Machine Learning, Neural Networks, and Scientific Computing.
 
-It provides a full workflow for **first-order optimization**, **convergence analysis**, and **model parameter estimation**, with reproducible outputs and visual diagnostics.
+The framework provides a structured workflow for first-order optimization, convergence analysis, and parameter estimation, with reproducible experiments and visual diagnostics.
 
----
+**Author:** Kevin Mota da Costa
 
-## Optimization Model
+**Portfolio:** [https://costakevinn.github.io](https://costakevinn.github.io)
 
-OptLearn minimizes objective functions of the form:
-
-[
-\min_{\theta \in \mathbb{R}^n} f(\theta)
-]
-
-using **numerical gradients** computed via central finite differences:
-
-[
-\frac{\partial f}{\partial \theta_i}
-\approx
-\frac{f(\theta_i + \varepsilon) - f(\theta_i - \varepsilon)}{2\varepsilon}
-]
-
-This formulation allows optimization of **arbitrary black-box objectives**, including loss functions that do not admit closed-form gradients.
+**LinkedIn:** [https://linkedin.com/in/costakevinnn](https://linkedin.com/in/costakevinnn)
 
 ---
 
-## Supported Optimizers
+## 🎯 Project Purpose
 
-OptLearn implements several widely used **gradient-based optimizers** under a unified API:
+OptLearn was developed to explore optimization as the core engine behind machine learning systems.
 
-* **Stochastic Gradient Descent (SGD)**
-* **Momentum**
-* **RMSProp**
-* **Adam**
+Instead of relying on automatic differentiation frameworks, this project:
+
+* Implements numerical gradient estimation
+* Benchmarks multiple first-order optimizers
+* Analyzes convergence behavior
+* Studies stability under difficult objective landscapes
+
+This reflects a systems-level understanding of how optimization drives learning.
+
+---
+
+## 🧠 Optimization Formulation
+
+The framework minimizes objective functions of the form:
+
+minimize f(θ), where θ ∈ Rⁿ
+
+Gradients are computed numerically using central finite differences:
+
+∂f/∂θᵢ ≈ [ f(θᵢ + ε) − f(θᵢ − ε) ] / (2ε)
+
+This enables optimization of arbitrary black-box objectives, including functions without closed-form gradients.
+
+---
+
+## ⚙ Supported Optimizers
+
+OptLearn implements several widely used gradient-based optimizers under a unified API:
+
+* Stochastic Gradient Descent (SGD)
+* Momentum
+* RMSProp
+* Adam
 
 Each optimizer tracks:
 
-* Objective value ( f(\theta) )
-* Gradient norm ( |\nabla f(\theta)| )
+* Objective value f(θ)
+* Gradient norm ||∇f(θ)||
 * Parameter trajectory across iterations
 
 Convergence behavior is automatically logged and visualized.
 
 ---
 
-## Optimization Benchmarks
+## 📊 Optimization Benchmarks
 
-The framework includes standard benchmark functions used to evaluate optimizer performance:
+The framework includes classical benchmark functions:
 
-* **Quadratic Function** (convex)
-* **Rosenbrock Function** (non-convex, ill-conditioned)
-* **Himmelblau Function** (multi-modal)
+* Quadratic function (convex)
+* Rosenbrock function (non-convex, ill-conditioned)
+* Himmelblau function (multi-modal)
 
-These examples highlight different optimization challenges such as curvature, local minima, and stability.
+These functions highlight challenges such as curvature sensitivity, local minima, and convergence stability.
 
-**Convergence example:**
+### Example: Convergence Behavior
 
 | Convergence                          |
 | ------------------------------------ |
@@ -63,26 +78,23 @@ These examples highlight different optimization challenges such as curvature, lo
 
 ---
 
-## Example: Neural Network Optimization
+## 🧪 Neural Network Optimization Example
 
-Neural network training is treated as a **pure optimization problem**.
+Neural network training is treated explicitly as an optimization problem.
 
 ### Model
 
-[
-y = a \sin(x) + b x + \epsilon
-]
+y = a sin(x) + b x + noise
 
-A fully connected neural network (R → R) is trained by minimizing a **weighted least-squares loss** with L2 regularization:
+A fully connected neural network (R → R) is trained by minimizing a weighted least-squares loss with L2 regularization.
 
-[
-\chi^2(\theta) =
-\sum_i \left( \frac{y_i - \hat y_i(\theta)}{\sigma_i} \right)^2
+Loss function:
 
-* \lambda |\theta|_2^2
-  ]
+χ²(θ) = Σ [ (yᵢ − ŷᵢ(θ)) / σᵢ ]² + λ ||θ||²
 
-This example demonstrates the application of general-purpose optimizers to **nonlinear function approximation** under noisy observations.
+This example demonstrates how general-purpose optimizers behave when applied to nonlinear function approximation under noisy observations.
+
+---
 
 ### Results
 
@@ -91,27 +103,37 @@ This example demonstrates the application of general-purpose optimizers to **non
 | ![](plots/NN_convergence.png) | ![](plots/nn_plot.png) |
 
 * Left: optimizer convergence (loss and gradient norm)
-* Right: learned function compared to noisy data
-* Illustrates stability, smoothness, and generalization
+* Right: learned function vs noisy data
+* Illustrates stability and generalization behavior
 
 ---
 
-## Features
+## 🔬 Capabilities Demonstrated
+
+* Numerical gradient computation
+* First-order optimization mechanics
+* Convergence diagnostics
+* Regularization handling
+* Non-convex optimization behavior
+* Reproducible experimentation
+
+---
+
+## 🛠 Features
 
 * Modular optimizer architecture
-* Numerical gradient computation
-* Convergence tracking and visualization
+* Central finite difference gradients
+* Convergence tracking
 * L2 regularization support
-* Reproducible experiments
-* Automatic saving of:
+* Automatic output generation:
 
-  * Optimization histories (`.txt`)
-  * Convergence plots (`.png`)
-  * Model-fit visualizations (`.png`)
+  * Optimization histories (.txt)
+  * Convergence plots (.png)
+  * Model-fit visualizations (.png)
 
 ---
 
-## Usage
+## ▶ Usage
 
 ```bash
 python3 main.py
@@ -119,23 +141,54 @@ python3 main.py
 
 Outputs:
 
-* `results/` — optimization logs
-* `plots/` — convergence and model-fit figures
+* `results/` → optimization logs
+* `plots/` → convergence and model-fit figures
 
 ---
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 OptLearn/
 ├── optimizers/      # SGD, Momentum, RMSProp, Adam
-├── examples/        # Benchmark and neural network examples
+├── examples/        # Benchmark and neural network cases
 ├── utils.py         # Gradients, plotting, logging
 ├── optimize.py      # Core optimization loop
 ├── main.py          # Execute experiments
 ├── results/         # Optimization histories
 └── plots/           # Convergence and fit plots
 ```
+
+---
+
+## 🛠 Tech Stack
+
+### Programming
+
+Python
+
+### Scientific Computing
+
+* NumPy
+
+### Optimization
+
+* SGD
+* Momentum
+* RMSProp
+* Adam
+* Finite difference gradients
+
+### Visualization
+
+* Matplotlib
+
+---
+
+## 🌐 Portfolio
+
+This project is part of my Machine Learning portfolio:
+👉 [https://costakevinn.github.io](https://costakevinn.github.io)
 
 ---
 
